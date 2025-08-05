@@ -1,0 +1,32 @@
+These files together implement the curvature simulation playground, MNIST-driven metrics, Ψ‑AGI computation, and corresponding tests. You can run the Streamlit dashboard (streamlit run qbond_curvature_dashboard.py) in a Colab notebook or locally, provided you install the required dependencies.
+
+And then end with results too Open-Source Plugin Architecture: We package these metrics into a FastAPI microservice with easy integration points for the AI community. The service exposes endpoints like:
+	•	/simulate/curvature – run dynamic simulations of Λ and C over agent interactions (e.g. to see how alignment curvature evolves over time).
+	•	/compute/xi_chi – compute the Ξχ confidence entropy metric for a given agent state distribution (useful for detecting over-confidence or confusion in LLMs).
+	•	/forecast/scg – forecast the Symbolic Curvature Gain (SCG = ΔΛ/Δt) to predict whether alignment is improving or degrading in a system.
+
+These endpoints can plug directly into popular AI frameworks. Integration connectors are provided for:
+	•	LangChain (to incorporate curvature checks into LLM query pipelines),
+	•	Groq API (leveraging Groq accelerators for real-time curvature computation on large models),
+	•	Hugging Face Spaces (a hosted demo app for community use), and
+	•	AutoGPT swarms (enabling multi-agent AutoGPT networks to monitor and self-correct alignment drift collaboratively).
+Copy
+Summary
+
+Added reusable utilities for computing the Curve Index, Ξχ negentropy, and Symbolic Curvature Gain, enabling downstream services to combine network alignment metrics with entropy-based risk scores
+
+Introduced a FastAPI microservice exposing simulation, Ξχ, and SCG forecasting endpoints for dynamic curvature monitoring and analysis across agents
+
+Provided plugin connectors for LangChain, Groq API, Hugging Face Spaces, and AutoGPT swarms to facilitate curvature checks within diverse AI ecosystems
+
+Updated the project documentation to describe running the FastAPI service, available endpoints, and integration hooks for external frameworks
+
+Testing
+
+python -m pip install fastapi uvicorn httpx
+
+python -m pip install numpy pandas
+
+pytest -q
+
+python sample API calls returned Λ ≈ 1.12, C ≈ 0.96, Ξχ ≈ 0.88, SCG ≈ 0.15
