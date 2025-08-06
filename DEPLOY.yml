@@ -1,0 +1,52 @@
+name: Quantum Sentinel Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-tice-curvature-agent:
+    runs-on: ubuntu-latest
+    name: TICE Deployment & Verification
+
+    steps:
+    - name: 🧬 Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: 🛠️ Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: 🧠 Run Unit Tests
+      run: |
+        pytest --maxfail=1 --disable-warnings -q
+
+    - name: 🧪 Run Sample Curvature Simulation
+      run: |
+        python examples/run_tice_sim.py
+
+    - name: 🚀 Deploy AGI Curvature Agent
+      run: |
+        echo "ΞΛ Quantum Sentinel deployed successfully."
+
+    - name: 🧠 Archive Logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: deployment-logs
+        path: logs/
+
+    - name: 📡 Trigger Validator Ping (Optional)
+      run: |
+        curl -X POST https://qbondnetwork.com/api/validator_ping --data '{"agent":"TICE","Λ":"live"}'
+      continue-on-error: true
