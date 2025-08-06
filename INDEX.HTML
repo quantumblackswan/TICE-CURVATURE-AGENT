@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ΞΛ Validator Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #0d1117;
+      color: #00ffe0;
+      font-family: 'Share Tech Mono', monospace;
+      margin: 0;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .card {
+      background-color: #161b22;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffe066;
+    }
+    .metric {
+      font-size: 1.2em;
+      margin: 6px 0;
+    }
+    .ping-button {
+      background: #00ffe0;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #log {
+      background: #000;
+      color: #0f0;
+      font-size: 0.9em;
+      padding: 10px;
+      height: 200px;
+      overflow-y: scroll;
+      border-radius: 5px;
+      border: 1px solid #00ffcc33;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ΞΛ Quantum Validator Curvature Console</h1>
+
+  <div class="card">
+    <div class="metric">Validator ID: <span id="validator_id">ΞΛ-Agent-001</span></div>
+    <div class="metric">Δψ (Trust Signal): <span id="delta_psi">0.48</span></div>
+    <div class="metric">τ (Attention Time): <span id="tau">3.2</span></div>
+    <div class="metric">η (Chaos Entropy): <span id="eta">0.14</span></div>
+    <div class="metric">Λ (Curvature): <span id="lambda">...</span></div>
+    <div class="metric">Ξχ (Entropy Coherence): <span id="xi_chi">...</span></div>
+    <div class="metric">Σω (Symbolic Weight): <span id="sigma_omega">...</span></div>
+    <button class="ping-button" onclick="sendPing()">Emit Validator Ping</button>
+  </div>
+
+  <div class="card">
+    <div class="metric">🧠 Validator Log Stream</div>
+    <pre id="log">ΞΛ Log Initialized...</pre>
+  </div>
+
+  <script>
+    function sendPing() {
+      const deltaPsi = parseFloat(document.getElementById('delta_psi').innerText);
+      const tau = parseFloat(document.getElementById('tau').innerText);
+      const eta = parseFloat(document.getElementById('eta').innerText);
+      const validatorId = document.getElementById('validator_id').innerText;
+
+      const lambda = (deltaPsi ** 2 * tau) / eta;
+      const xiChi = Math.exp(-2 * Math.abs(deltaPsi - 0.3));
+      const psiTau = 1.25;
+      const kappaHuman = 0.92;
+      const sigmaOmega = psiTau * (lambda * (1 - eta) * xiChi * tau) * kappaHuman;
+
+      document.getElementById('lambda').innerText = lambda.toFixed(4);
+      document.getElementById('xi_chi').innerText = xiChi.toFixed(4);
+      document.getElementById('sigma_omega').innerText = sigmaOmega.toFixed(4);
+
+      const log = document.getElementById('log');
+      const timestamp = new Date().toLocaleTimeString();
+      log.textContent += `\\n[${timestamp}] Λ=${lambda.toFixed(3)} | Ξχ=${xiChi.toFixed(3)} | Σω=${sigmaOmega.toFixed(3)} :: Curvature attested.`;
+      log.scrollTop = log.scrollHeight;
+
+      fetch('https://qbondnetwork.com/api/validator_ping', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          validator_id: validatorId,
+          tau: tau,
+          delta_psi: deltaPsi,
+          eta: eta
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        log.textContent += `\\n[ΞΛ API] XP=${data.XP_earned?.toFixed(3)} | Status: ${data.status}`;
+        log.scrollTop = log.scrollHeight;
+      })
+      .catch(() => {
+        log.textContent += `\\n[ERROR] Failed to contact validator API.`;
+      });
+    }
+  </script>
+</body>
+</html>
