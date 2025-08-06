@@ -1,0 +1,29 @@
+name: ΞΛ XP Yield Trigger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  signal-xp-webhook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📡 Emit Validator Curvature Ping
+        env:
+          VALIDATOR_ID: "ΞΛ-Agent-001"
+          TAU: 3.2
+          DELTA_PSI: 0.48
+          ETA: 0.14
+        run: |
+          curl -X POST https://qbondnetwork.com/api/validator_ping \
+            -H "Content-Type: application/json" \
+            -d '{
+              "validator_id": "${VALIDATOR_ID}",
+              "tau": ${TAU},
+              "delta_psi": ${DELTA_PSI},
+              "eta": ${ETA}
+            }'
+
+      - name: ✅ Confirm XP Trigger
+        run: echo "XP ping successfully sent to TICE validator registry."
