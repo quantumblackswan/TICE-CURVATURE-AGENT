@@ -567,8 +567,16 @@ try:
             interpretation = "highly volatile"
         return ReflectResponse(forecast=forecast, phi_interpretation=interpretation)
 
+    @app.get("/health")
+    async def health_endpoint() -> Dict[str, str]:
+        """Health check endpoint for deployment monitoring."""
+        return {"status": "healthy", "service": "TICE Curvature Agent"}
+
     def run_api(host: str = "0.0.0.0", port: int = 8000) -> None:
         import uvicorn
+        import os
+        # Read port from environment variable if available
+        port = int(os.environ.get("PORT", port))
         uvicorn.run(app, host=host, port=port)
 
 except ImportError:
