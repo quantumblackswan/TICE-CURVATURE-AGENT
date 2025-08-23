@@ -20,7 +20,18 @@ import math
 
 import torch
 
-from tice_plugin import TICEPlugin
+# Import TICE plugin from the correct file
+import importlib.util
+import os
+import sys
+
+# Add current directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+spec = importlib.util.spec_from_file_location("tice_plugin_newest", "TICE plug newest.py")
+tice_plugin_newest = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(tice_plugin_newest)
+TICEPlugin = tice_plugin_newest.TICEPlugin
 
 
 class TestTICEPlugin(unittest.TestCase):

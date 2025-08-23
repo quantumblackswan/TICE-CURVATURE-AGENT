@@ -26,7 +26,11 @@ def run_simulation():
             raise ImportError("PyTorch not available")
             
         # Import the enhanced TICE plugin
-        from tice_plugin_enhanced import TICEPlugin
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("tice_plugin_newest", "TICE plug newest.py")
+        tice_plugin_newest = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(tice_plugin_newest)
+        TICEPlugin = tice_plugin_newest.TICEPlugin
         
         # Create plugin instance
         plugin = TICEPlugin(enable_history=True)
@@ -59,7 +63,7 @@ def run_simulation():
         
         # Test forecasting if history is available
         if len(plugin.get_history()) > 0:
-            forecast = plugin.forecast_lambda(steps=3)
+            forecast = plugin.forecast_lambda(n_steps=3)
             print(f"🔮 Forecast (3 steps): {forecast}")
         
         print("✅ TICE simulation completed successfully!")
